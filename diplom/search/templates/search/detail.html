@@ -1,0 +1,23 @@
+{% extends 'search/base.html' %}
+
+{% load blog_extras %}
+
+{% block content %}
+  <div class="box">
+    <section class="hero is-primary is-medium">
+      <div class="hero-body">
+        <p class="title">{{ post.question }}</p>
+        <p class="subtitle">{{ post.created_at }}</p>
+
+      </div>
+    </section>
+
+    <div class="content intro">
+      <p>Есть ли ответ? {{ post.is_answered }}</p>
+    </div>
+    <div class="content">
+      {{ post.answer|convert_markdown|safe }}
+    </div>
+  </div>
+
+{% endblock %}

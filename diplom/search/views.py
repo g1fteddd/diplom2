@@ -46,3 +46,13 @@ def upload_file(request):
     else:
         form_csv = UploadFileForm()
     return render(request, 'search/add.html', {'form_csv': form_csv})
+
+def item(request):
+    posts = Questions.objects.all()
+
+    return render(request, 'search/item.html', {"posts": posts})
+
+def detail(request, pk):
+    post = Questions.objects.get(pk=pk)
+
+    return render(request, 'search/detail.html', {"post": post})
