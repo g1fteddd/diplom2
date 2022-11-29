@@ -8,4 +8,4 @@ register = template.Library()
 
 @register.filter
 def convert_markdown(value):
-    return markdown.markdown(value, extensions=["markdown.extensions.fenced_code", "tables"])
+    return markdown.markdown(value, extensions=["extra"]) # markdown.extensions.fenced_code", "markdown.extensions.tables

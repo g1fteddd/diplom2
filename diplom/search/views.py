@@ -10,7 +10,9 @@ import csv
 
 def add_in_database(number_work, question, answer):
     question_after_processing = text_processing(question.lower().strip())
+    print(question_after_processing)
     keywords = search_keywords(question_after_processing)
+    print(keywords)
     if answer == '':
         Questions.objects.create(question=question, keywords=keywords, number_work=number_work)
     else:
@@ -22,15 +24,15 @@ def index(request):
         form = QuestionsForm(request.POST)
         if form.is_valid():
 
-            array = read_csv()
-            for item in array:
-                add_in_database(int(item[0]), item[1], item[2])
+            # array = read_csv()
+            # for item in array:
+            #     add_in_database(int(item[0]), item[1], item[2])
 
 
 
-            # question_from_form = form.cleaned_data['question'].lower().strip() # Вопрос студента
-            # number_work = form.cleaned_data['number_work'] # Номер практической работы
-            # add_in_database(number_work, question_from_form, '')
+            question_from_form = form.cleaned_data['question'].lower().strip() # Вопрос студента
+            number_work = form.cleaned_data['number_work'] # Номер практической работы
+            add_in_database(number_work, question_from_form, '')
 
 
             # Сделать парсинг файлов csv про определённому формату
