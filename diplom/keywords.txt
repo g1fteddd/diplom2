@@ -21,3 +21,4 @@ MAX
 AVG
 sqlparameter
 sql
+таблица

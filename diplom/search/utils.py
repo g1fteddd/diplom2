@@ -2,7 +2,7 @@ import re
 import csv
 
 # поиск ключевых слов
-f = open('keywords.txt', 'r')
+f = open('keywords.txt', 'r', encoding='utf-8')
 keys = f.read().split('\n')
 
 
@@ -13,6 +13,7 @@ def search_keywords(text):
 
     for i in range(len(keys)):
         word = keys[i].lower().strip()
+        print(word)
         if word in text:
             keywords.append(word)
 
