@@ -13,7 +13,6 @@ def search_keywords(text):
 
     for i in range(len(keys)):
         word = keys[i].lower().strip()
-        print(word)
         if word in text:
             keywords.append(word)
 
