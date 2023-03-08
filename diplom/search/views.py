@@ -50,12 +50,29 @@ def item(request):
             keywords = keywords.split(';')
             print(keywords)
 
+            # Поиск по статьям с определённым номером лабы
             posts = Questions.objects.filter(number_work=number_work)
             filtered_posts_id = []
             for i in range(len(posts)):
                 for j in range(len(keywords)):
                     if keywords[j] in posts[i].keywords.split(';'):
                         filtered_posts_id.append(posts[i].id)
+
+
+
+            # Поиск по всем статьям
+            if len(filtered_posts_id) == 0:
+                posts = Questions.objects.all()
+                for i in range(len(posts)):
+                    for j in range(len(keywords)):
+                        if keywords[j] in posts[i].keywords.split(';'):
+                            filtered_posts_id.append(posts[i].id)
+
+            print(len(filtered_posts_id))
+            # Если вообще ничего не нашлось
+            if len(filtered_posts_id) == 0:
+                add_in_database(number_work, question_from_form, '')
+
 
             filtered_posts = []
             for i in range(len(filtered_posts_id)):

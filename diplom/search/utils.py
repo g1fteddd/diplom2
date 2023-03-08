@@ -1,12 +1,14 @@
 import re
 import csv
 
+import pymorphy2 as pymorphy2
+
 # поиск ключевых слов
 f = open('keywords.txt', 'r', encoding='utf-8')
 keys = f.read().split('\n')
 
 
-# morph = pymorphy2.MorphAnalyzer()
+morph = pymorphy2.MorphAnalyzer()
 
 def search_keywords(text):
     keywords = []
@@ -27,18 +29,21 @@ def search_keywords(text):
 
 
 def remove_exception_symbols(text):
-    reg = re.compile('[^a-zA-Zа-яА-Я- ]')
+    reg = re.compile('[^a-zA-Zа-яА-Я- ёЁ]')
     text = reg.sub('', text)
     return text
 
 
-# def lemmatization(text):
-#     return [morph.parse(word)[0].normal_form for word in text]
+def lemmatization(text):
+    return [morph.parse(word)[0].normal_form for word in text]
 
 
 def text_processing(main_text):
     main_text = remove_exception_symbols(main_text)
-    # main_text = lemmatization(main_text)
+    print(main_text)
+    main_text = main_text.split(" ")
+    main_text = lemmatization(main_text)
+    print(main_text)
     return main_text
 
 
