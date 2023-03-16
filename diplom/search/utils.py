@@ -1,5 +1,6 @@
 import re
 import csv
+from .models import Keywords
 
 import pymorphy2 as pymorphy2
 
@@ -10,18 +11,36 @@ keys = f.read().split('\n')
 
 morph = pymorphy2.MorphAnalyzer()
 
-def search_keywords(text):
-    keywords = []
+def search_keywords(text, flag=False):
 
-    for i in range(len(keys)):
-        word = keys[i].lower().strip()
-        if word in text:
-            keywords.append(word)
+    text = " ".join(text)
+    if not flag:
 
-    if len(keywords) == 0:
-        return ''
+        keywords = []
+        kewords_for_db = Keywords.objects.all()
+        for i in range(len(kewords_for_db)):
+            word = kewords_for_db[i].word.lower().strip()
+            if word in text:
+                print("ping")
+                keywords.append(word)
 
-    return ';'.join(keywords)
+        if len(keywords) == 0:
+            return ''
+
+        return keywords
+    else:
+        keywords = []
+        kewords_for_db = Keywords.objects.all()
+        for i in range(len(kewords_for_db)):
+            word = kewords_for_db[i].word.lower().strip()
+            if word in text:
+                print("ping")
+                keywords.append(kewords_for_db[i])
+
+        if len(keywords) == 0:
+            return ''
+
+        return keywords
 
 
 # def remove_stopword_from_text(text, stopwords):
