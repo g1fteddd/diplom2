@@ -56,7 +56,7 @@
     <div class="content">
 
 
-        <form action="{% url 'item' %}" method="post" class="input-form">
+        <form action="{% url 'items' %}" method="post" class="input-form">
         {% csrf_token %}
         {{ form.as_p }}
 

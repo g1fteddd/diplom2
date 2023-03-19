@@ -8,11 +8,10 @@ import pymorphy2 as pymorphy2
 f = open('keywords.txt', 'r', encoding='utf-8')
 keys = f.read().split('\n')
 
-
 morph = pymorphy2.MorphAnalyzer()
 
-def search_keywords(text, flag=False):
 
+def search_keywords(text, flag=False):
     text = " ".join(text)
     if not flag:
 
@@ -41,10 +40,6 @@ def search_keywords(text, flag=False):
             return ''
 
         return keywords
-
-
-# def remove_stopword_from_text(text, stopwords):
-#     return [token for token in text if token not in stopwords]
 
 
 def remove_exception_symbols(text):
