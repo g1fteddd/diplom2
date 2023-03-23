@@ -15,10 +15,11 @@ def search_keywords(text, flag=False):
         keywords = []
         kewords_for_db = Keywords.objects.all()
         for i in range(len(kewords_for_db)):
-            word = kewords_for_db[i].word.lower().strip()
+            word = " ".join(text_processing(kewords_for_db[i].word.lower().strip()))
             if word in text:
-                print("ping")
                 keywords.append(word)
+
+        print("Какие ключевые слова нашлись", keywords)
 
         if len(keywords) == 0:
             return ''
@@ -28,13 +29,15 @@ def search_keywords(text, flag=False):
         keywords = []
         kewords_for_db = Keywords.objects.all()
         for i in range(len(kewords_for_db)):
-            word = kewords_for_db[i].word.lower().strip()
+            word = " ".join(text_processing(kewords_for_db[i].word.lower().strip()))
+
             if word in text:
-                print("ping")
                 keywords.append(kewords_for_db[i])
 
         if len(keywords) == 0:
             return ''
+
+
 
         return keywords
 
@@ -51,10 +54,8 @@ def lemmatization(text):
 
 def text_processing(main_text):
     main_text = remove_exception_symbols(main_text)
-    print(main_text)
     main_text = main_text.split(" ")
     main_text = lemmatization(main_text)
-    print(main_text)
     return main_text
 
 

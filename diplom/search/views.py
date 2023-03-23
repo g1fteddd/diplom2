@@ -10,12 +10,9 @@ import csv
 # Create your views here.
 
 def add_in_database(number_work, question, answer):
-    print("почему сюда попадает")
     question_after_processing = text_processing(question.lower().strip())
-    print(question_after_processing)
     keywords = search_keywords(question_after_processing, True)
 
-    print(keywords)
     if answer == '':
         instance = Questions.objects.create(question=question, number_work=number_work)
         for i in range(len(keywords)):
@@ -51,30 +48,32 @@ def search(request):
 
             filtered_posts_id = []
             if keywords != '':
-                posts = Questions.objects.filter(number_work=number_work)
+                posts = Questions.objects.filter(number_work=number_work, is_answered=True)
 
                 for i in range(len(posts)):
                     for j in range(len(keywords)):
                         keywords_for_questions = []
 
                         for k in range(len(posts[i].keywords.all())):
-                            keywords_for_questions.append(posts[i].keywords.all()[k].word.lower().strip())
+                            keywords_for_questions.append(" ".join(text_processing(posts[i].keywords.all()[k].word.lower().strip())))
 
                         if keywords[j] in keywords_for_questions:
                             filtered_posts_id.append(posts[i].id)
 
                 if len(filtered_posts_id) == 0:
-                    posts = Questions.objects.all()
+                    posts = Questions.objects.filter(is_answered=True)
                     for i in range(len(posts)):
                         for j in range(len(keywords)):
                             keywords_for_questions = []
                             for k in range(len(posts[i].keywords.all())):
-                                keywords_for_questions.append(posts[i].keywords.all()[k].word.lower().strip())
+                                keywords_for_questions.append(" ".join(text_processing(posts[i].keywords.all()[k].word.lower().strip())))
                             if keywords[j] in keywords_for_questions:
                                 filtered_posts_id.append(posts[i].id)
 
+
                 if len(filtered_posts_id) == 0:
                     add_in_database(number_work, question_from_form, '')
+
             else:
                 add_in_database(number_work, question_from_form, '')
 
@@ -85,40 +84,6 @@ def search(request):
             filtered_posts = set(filtered_posts)
             lenght = len(filtered_posts)
 
-            # filtered_posts_id = []
-            # if keywords[0] != '':
-            #     print(len(keywords))
-            #     # Поиск по статьям с определённым номером лабы
-            #     posts = Questions.objects.filter(number_work=number_work)
-            #
-            #     for i in range(len(posts)):
-            #         for j in range(len(keywords)):
-            #             if keywords[j] in posts[i].keywords.split(';'):
-            #                 filtered_posts_id.append(posts[i].id)
-            #
-            #     # Поиск по всем статьям
-            #     if len(filtered_posts_id) == 0:
-            #         posts = Questions.objects.all()
-            #         for i in range(len(posts)):
-            #             for j in range(len(keywords)):
-            #                 if keywords[j] in posts[i].keywords.split(';'):
-            #                     filtered_posts_id.append(posts[i].id)
-            #
-            #     print(len(filtered_posts_id))
-            #     # Если вообще ничего не нашлось
-            #     # if len(filtered_posts_id) == 0:
-            #         # add_in_database(number_work, question_from_form, '')
-            #
-            # # else:
-            #     # add_in_database(number_work, question_from_form, '')
-            #
-            # filtered_posts = []
-            # for i in range(len(filtered_posts_id)):
-            #     filtered_posts.append(Questions.objects.get(pk=filtered_posts_id[i]))
-            #
-            # filtered_posts = set(filtered_posts)
-            # lenght = len(filtered_posts)
-            # # add_in_database(number_work, question_from_form, '')
 
     else:
         form = QuestionsForm()
