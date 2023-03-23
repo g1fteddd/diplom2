@@ -1,12 +1,9 @@
 import re
 import csv
-from .models import Keywords
+from .models import Keywords, Questions
 
 import pymorphy2 as pymorphy2
 
-# поиск ключевых слов
-f = open('keywords.txt', 'r', encoding='utf-8')
-keys = f.read().split('\n')
 
 morph = pymorphy2.MorphAnalyzer()
 
