@@ -11,5 +11,5 @@ pip install -r requirements.txt
 Поменять строку подключения в settings.py  
 python manage.py migrate  
 
-Запуск сервера:  
+## Запуск сервера:  
 python manage.py runserver  
