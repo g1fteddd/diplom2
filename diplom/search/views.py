@@ -36,6 +36,19 @@ def upload_file(request):
     return render(request, 'search/add.html', {'form_csv': form_csv})
 
 
+def send(request):
+    if request.method == "POST":
+        form = QuestionsForm(request.POST)
+        if form.is_valid():
+            question_from_form = form.cleaned_data['question'].lower().strip()  # Вопрос студента
+            print(question_from_form)
+            number_work = form.cleaned_data['number_work']  # Номер практической работы
+            print(number_work)
+            add_in_database(number_work, question_from_form, '')
+
+    return render(request, 'search/send.html')
+
+
 def search(request):
     if request.method == "POST":
         form = QuestionsForm(request.POST)
@@ -44,7 +57,9 @@ def search(request):
             question_from_form = form.cleaned_data['question'].lower().strip()  # Вопрос студента
             number_work = form.cleaned_data['number_work']  # Номер практической работы
             question_after_processing = text_processing(question_from_form)
+            print("Обработанный вопрос", question_after_processing)
             keywords = search_keywords(question_after_processing)
+            print("Какие ключевые слова нашлись", keywords)
 
             filtered_posts_id = []
             if keywords != '':
@@ -55,10 +70,12 @@ def search(request):
                         keywords_for_questions = []
 
                         for k in range(len(posts[i].keywords.all())):
-                            keywords_for_questions.append(" ".join(text_processing(posts[i].keywords.all()[k].word.lower().strip())))
+                            keywords_for_questions.append(
+                                text_processing(posts[i].keywords.all()[k].word.lower().strip()))
 
                         if keywords[j] in keywords_for_questions:
                             filtered_posts_id.append(posts[i].id)
+                            print(filtered_posts_id)
 
                 if len(filtered_posts_id) == 0:
                     posts = Questions.objects.filter(is_answered=True)
@@ -66,10 +83,10 @@ def search(request):
                         for j in range(len(keywords)):
                             keywords_for_questions = []
                             for k in range(len(posts[i].keywords.all())):
-                                keywords_for_questions.append(" ".join(text_processing(posts[i].keywords.all()[k].word.lower().strip())))
+                                keywords_for_questions.append(
+                                    text_processing(posts[i].keywords.all()[k].word.lower().strip()))
                             if keywords[j] in keywords_for_questions:
                                 filtered_posts_id.append(posts[i].id)
-
 
                 if len(filtered_posts_id) == 0:
                     add_in_database(number_work, question_from_form, '')
@@ -77,11 +94,14 @@ def search(request):
             else:
                 add_in_database(number_work, question_from_form, '')
 
+            # Определение релевантности
+            filtered_posts_id = sorted(set(filtered_posts_id), key=lambda x: (-filtered_posts_id.count(x),
+                                                                              filtered_posts_id.index(x)))
+            print(filtered_posts_id)
             filtered_posts = []
             for i in range(len(filtered_posts_id)):
                 filtered_posts.append(Questions.objects.get(pk=filtered_posts_id[i]))
 
-            filtered_posts = set(filtered_posts)
             lenght = len(filtered_posts)
 
 
@@ -93,5 +113,5 @@ def search(request):
 
 def detail(request, pk):
     post = Questions.objects.get(pk=pk)
-
-    return render(request, 'search/detail.html', {"post": post})
+    form = QuestionsForm()
+    return render(request, 'search/detail.html', {"post": post, 'form': form})

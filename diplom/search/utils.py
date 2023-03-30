@@ -4,22 +4,25 @@ from .models import Keywords, Questions
 
 import pymorphy2 as pymorphy2
 
-
 morph = pymorphy2.MorphAnalyzer()
 
 
 def search_keywords(text, flag=False):
-    text = " ".join(text)
+    # text = " ".join(text)
     if not flag:
 
         keywords = []
-        kewords_for_db = Keywords.objects.all()
-        for i in range(len(kewords_for_db)):
-            word = " ".join(text_processing(kewords_for_db[i].word.lower().strip()))
-            if word in text:
-                keywords.append(word)
+        keywords_for_db = Keywords.objects.all()
+        for i in range(len(keywords_for_db)):
+            word = text_processing(keywords_for_db[i].word.lower().strip())
+            len_words = len(word)
+            sum = 0
+            for j in range(len_words):
+                if word[j] in text:
+                    sum += 1
 
-        print("Какие ключевые слова нашлись", keywords)
+            if sum == len_words:
+                keywords.append(word)
 
         if len(keywords) == 0:
             return ''
@@ -27,17 +30,20 @@ def search_keywords(text, flag=False):
         return keywords
     else:
         keywords = []
-        kewords_for_db = Keywords.objects.all()
-        for i in range(len(kewords_for_db)):
-            word = " ".join(text_processing(kewords_for_db[i].word.lower().strip()))
+        keywords_for_db = Keywords.objects.all()
+        for i in range(len(keywords_for_db)):
+            word = text_processing(keywords_for_db[i].word.lower().strip())
+            len_words = len(word)
+            sum = 0
+            for j in range(len_words):
+                if word[j] in text:
+                    sum += 1
 
-            if word in text:
-                keywords.append(kewords_for_db[i])
+            if sum == len_words:
+                keywords.append(keywords_for_db[i])
 
         if len(keywords) == 0:
             return ''
-
-
 
         return keywords
 

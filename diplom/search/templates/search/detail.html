@@ -36,6 +36,25 @@
             font-size: 18px;
             line-height: 28px;
         }
+
+        #id_question {
+            width: 500px;
+            border: 2px solid #e7e7e9;
+            padding: 12px 20px;
+            font-size: 18px;
+            line-height: 28px;
+        }
+        #id_number_work {
+            border: 2px solid #e7e7e9;
+            padding: 12px 20px;
+            font-size: 18px;
+            line-height: 28px;
+        }
+        .input-form {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 </style>
   <div class="box">
     <section class="hero is-primary is-medium">
@@ -54,10 +73,12 @@
     </div>
   </div>
 
-  <form action="" class="input-form">
-      <input type="text" name="question-for-teacher" placeholder="Задайте вопрос преподавателю" maxlength="200" id="question-for-teacher">
-      <input type="number" name="number" placeholder="№" maxlength="200" id="number">
-      <input type="text" name="email" placeholder="E-mail" maxlength="200" id="email">
+  <form action="{% url 'send' %}" method="post" class="input-form">
+<!--      <input type="text" name="question-for-teacher" placeholder="Задайте вопрос преподавателю" maxlength="200" id="question-for-teacher">-->
+<!--      <input type="number" name="number" placeholder="№" maxlength="200" id="number">-->
+<!--      <input type="text" name="email" placeholder="E-mail" maxlength="200" id="email">-->
+      {% csrf_token %}
+      {{ form.as_p }}
       <button type="submit" class="btn btn-primary btn-block">Задать вопрос</button>
   </form>
 
