@@ -40,9 +40,9 @@ def send(request):
     if request.method == "POST":
         form = QuestionsForm(request.POST)
         if form.is_valid():
-            question_from_form = form.cleaned_data['question'].lower().strip()  # Вопрос студента
+            question_from_form = form.cleaned_data['question'].lower().strip()
             print(question_from_form)
-            number_work = form.cleaned_data['number_work']  # Номер практической работы
+            number_work = form.cleaned_data['number_work']
             print(number_work)
             add_in_database(number_work, question_from_form, '')
 
@@ -54,12 +54,12 @@ def search(request):
         form = QuestionsForm(request.POST)
         if form.is_valid():
 
-            question_from_form = form.cleaned_data['question'].lower().strip()  # Вопрос студента
-            number_work = form.cleaned_data['number_work']  # Номер практической работы
+            question_from_form = form.cleaned_data['question'].lower().strip()
+            number_work = form.cleaned_data['number_work']
+
             question_after_processing = text_processing(question_from_form)
-            print("Обработанный вопрос", question_after_processing)
+
             keywords = search_keywords(question_after_processing)
-            print("Какие ключевые слова нашлись", keywords)
 
             filtered_posts_id = []
             if keywords != '':
@@ -68,11 +68,9 @@ def search(request):
                 for i in range(len(posts)):
                     for j in range(len(keywords)):
                         keywords_for_questions = []
-
                         for k in range(len(posts[i].keywords.all())):
                             keywords_for_questions.append(
                                 text_processing(posts[i].keywords.all()[k].word.lower().strip()))
-
                         if keywords[j] in keywords_for_questions:
                             filtered_posts_id.append(posts[i].id)
                             print(filtered_posts_id)
@@ -94,17 +92,14 @@ def search(request):
             else:
                 add_in_database(number_work, question_from_form, '')
 
-            # Определение релевантности
             filtered_posts_id = sorted(set(filtered_posts_id), key=lambda x: (-filtered_posts_id.count(x),
                                                                               filtered_posts_id.index(x)))
-            print(filtered_posts_id)
+
             filtered_posts = []
             for i in range(len(filtered_posts_id)):
                 filtered_posts.append(Questions.objects.get(pk=filtered_posts_id[i]))
 
             lenght = len(filtered_posts)
-
-
     else:
         form = QuestionsForm()
 
